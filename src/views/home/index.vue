@@ -4,11 +4,13 @@
     <el-container>
       <!-- 左侧 -->
       <el-aside class="left">
-        左侧
+        <layout-aside></layout-aside>
       </el-aside>
       <!-- 右侧 -->
       <el-container>
-        <el-header class="header">头部</el-header>
+        <el-header class="header">
+          <layout-header></layout-header>
+        </el-header>
         <el-main class="main">主体</el-main>
       </el-container>
     </el-container>
@@ -16,13 +18,15 @@
 </template>
 
 <script>
-export default {}
+import layoutAside from '../../components/home/layout-aside'
+import layoutHeader from '../../components/home/layout-header'
+export default {
+  components: {
+    layoutAside,
+    layoutHeader
+  }
+}
 </script>
 <style lang="less" scoped>
 
-  .left{
-    // width:200px;
-    // height: 100vh;
-    // background-color: #ccc;
-  }
 </style>
