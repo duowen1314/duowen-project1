@@ -1,15 +1,24 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/home/index.vue'
-import Login from './views/login/index.vue'
+import Home from './views/home'
+import Login from './views/login'
+import Main from './views/home/main'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
+      path: '/home',
+      component: Home,
+      children: [{
+        path: '', // 默认二级路由的地址path为空
+        component: Main
+      }]
+    },
+    {
       path: '/',
-      component: Home
+      redirect: '/home'
     },
     {
       path: '/login',
