@@ -80,9 +80,9 @@ export default {
             data: this.loginForm
           }).then(res => {
             console.log(res)
-            if (res.status === 201) {
+            if (res.message === 'OK') {
               // 放到前端缓存中
-              localStorage.setItem('username', res.data.data.token)
+              localStorage.setItem('username', res.data.token)
               this.$router.push('/')
             }
           }).catch(() => {
