@@ -14,6 +14,9 @@ export default new Router({
       children: [{
         path: '', // 默认二级路由的地址path为空
         component: Main
+      }, {
+        path: 'comment',
+        component: () => import('./views/comment')
       }]
     },
     {
