@@ -2,7 +2,13 @@
 import axios from 'axios'
 import router from './../permission'
 import { Message } from 'element-ui'
+import jsonBigInt from 'json-bigint' // 大数字处理
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0' // 赋值继承地址
+// 大数字
+axios.defaults.transformResponse = [function (data) {
+  // data 是响应回来的字符串
+  return data ? jsonBigInt.parse(data) : {}
+}]
 
 // 请求拦截器 interceptors 拦截器 request请求 config配置
 axios.interceptors.request.use(function (config) {

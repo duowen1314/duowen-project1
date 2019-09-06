@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/home'
 import Login from './views/login'
 import Main from './views/home/main'
+import Test from './views/test'
 
 Vue.use(Router)
 
@@ -20,6 +21,12 @@ export default new Router({
       }, {
         path: 'publish',
         component: () => import('./views/publish')
+      }, {
+        path: 'material',
+        component: () => import('./views/material')
+      }, {
+        path: 'articles',
+        component: () => import('./views/articles')
       }]
     },
     {
@@ -29,6 +36,10 @@ export default new Router({
     {
       path: '/login',
       component: Login
+    },
+    {
+      path: '/test',
+      component: Test
     }
     // {
     //   path: '/about',
