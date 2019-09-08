@@ -46,40 +46,38 @@ export default {
       this.page.page = newPage
       this.getComments() // 获取最新页码的数据
     },
-    openOrClose (row) {
+    async  openOrClose (row) {
       let mess = row.comment_status ? '关闭' : '打开'
-      this.$confirm(`您是否要${mess}评论?`, '提示').then(() => {
-        // 写调用接口
-        this.$axios({
-          method: 'put',
-          url: '/comments/status',
-          params: { article_id: row.id.toString() },
-          data: { allow_comment: !row.comment_status }
-        }).then(results => {
-          this.getComments()// 成功之后重新调用数据
-        })
+      await this.$confirm(`您是否要${mess}评论?`, '提示')
+      // 写调用接口
+      await this.$axios({
+        method: 'put',
+        url: '/comments/status',
+        params: { article_id: row.id.toString() },
+        data: { allow_comment: !row.comment_status }
       })
+      this.getComments()// 成功之后重新调用数据
     },
     formatter (row) {
       return row.comment_status ? '正常' : '关闭'
     },
-    getComments () {
+    // 获取评论列表
+    async getComments () {
       this.loading = true // 请求数据之前把进度条打开
       // query 相当于get参数 路径参数 URL参数
       // body 路径 参数 data
-      this.$axios({
+      let res = await this.$axios({
         url: '/articles',
         params: {
           response_type: 'comment',
           page: this.page.page,
           per_page: this.page.pageSize
         }
-      }).then(res => {
-        this.loading = false // 响应回来后把进度条关了
-        console.log(res)
-        this.list = res.data.results
-        this.page.total = res.data.total_count
       })
+      this.loading = false // 响应回来后把进度条关了
+      console.log(res)
+      this.list = res.data.results
+      this.page.total = res.data.total_count
     }
 
   },

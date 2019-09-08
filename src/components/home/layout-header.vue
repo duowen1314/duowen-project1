@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/events'
 export default {
   data () {
     return {
@@ -34,6 +35,7 @@ export default {
     }
   },
   methods: {
+    // 获取用户个人信息
     getUserInfo () {
     //   let token = localStorage.getItem('username')// 获取token
       //   console.log(token)
@@ -57,6 +59,9 @@ export default {
     }
   },
   created () {
+    eventBus.$on('updateUserInfo', () => {
+      this.getUserInfo()
+    })
     this.getUserInfo()
   }
 }
@@ -84,6 +89,10 @@ export default {
           height:40px;
           overflow: hidden;
           border-radius: 100%;
+          img{
+            width:100%;
+            height: 100%;
+          }
       }
   }
 }

@@ -36,7 +36,7 @@
     <div class="total-info">共找到<template style="color:#c00">{{page.total}}</template>条符合条件的内容</div>
     <div class="article-list">
       <!-- 循环项 -->
-      <div class="article-item" v-for="item in list" :key="item.id">
+      <div class="article-item" v-for="item in list" :key="item.id.toString()">
         <div class="left">
           <img
             :src="item.cover.images.length ? item.cover.images[0] : defaultImg"
@@ -50,7 +50,7 @@
           </div>
         </div>
         <div class="right">
-          <span>
+          <span @click="modify(item)">
             <i class="el-icon-edit"></i>修改
           </span>
           <span @click="delItem(item)">
@@ -87,6 +87,11 @@ export default {
     }
   },
   methods: {
+    // 点击修改跳转
+    modify (item) {
+      // 跳转到发布页面
+      this.$router.push(`/home/publish/${item.id.toString()}`)
+    },
     // 删除功能
     delItem (item) {
       console.log(item.id.toString())
