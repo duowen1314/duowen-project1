@@ -3,7 +3,7 @@
     <!-- 最外层 -->
     <el-container>
       <!-- 左侧 -->
-      <el-aside class="left" style="width:200px;">
+      <el-aside class="left" :style="{width:collapse?'61px':'201px'}" style="overflow:hidden">
         <layout-aside></layout-aside>
       </el-aside>
       <!-- 右侧 -->
@@ -20,10 +20,18 @@
 </template>
 
 <script>
-// import layoutAside from '../../components/home/layout-aside'
-// import layoutHeader from '../../components/home/layout-header'
+import eventBus from '../../utils/events'
 export default {
-
+  data () {
+    return {
+      collapse: false
+    }
+  },
+  created () {
+    eventBus.$on('openOrClose', (status) => {
+      this.collapse = status
+    })
+  }
 }
 </script>
 <style lang="less" scoped>

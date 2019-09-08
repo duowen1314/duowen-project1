@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { getChannels } from '../../api/publish'
 export default {
   data () {
     let coverRulse = function (rule, value, callBack) {
@@ -116,13 +117,15 @@ export default {
       }
     },
     // 获取频道列表数据
-    getChannels () {
-      this.$axios({
-        url: '/channels'
-      }).then(res => {
-        console.log(res)
-        this.channels = res.data.channels
-      })
+    async  getChannels () {
+      // this.$axios({
+      //   url: '/channels'
+      // }).then(res => {
+      //   console.log(res)
+      //   this.channels = res.data.channels
+      // })
+      let res = await getChannels()
+      this.channels = res.data.channels
     },
     // 获取默认文章
     getPublish (id) {

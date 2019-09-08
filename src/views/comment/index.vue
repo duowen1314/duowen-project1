@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { getComments, openOrClose } from '../../api/comment'
 export default {
   data () {
     return {
@@ -50,12 +51,13 @@ export default {
       let mess = row.comment_status ? '关闭' : '打开'
       await this.$confirm(`您是否要${mess}评论?`, '提示')
       // 写调用接口
-      await this.$axios({
-        method: 'put',
-        url: '/comments/status',
-        params: { article_id: row.id.toString() },
-        data: { allow_comment: !row.comment_status }
-      })
+      // await this.$axios({
+      //   method: 'put',
+      //   url: '/comments/status',
+      //   params: { article_id: row.id.toString() },
+      //   data: { allow_comment: !row.comment_status }
+      // })
+      await openOrClose({ article_id: row.id.toString() }, { allow_comment: !row.comment_status })
       this.getComments()// 成功之后重新调用数据
     },
     formatter (row) {
@@ -66,13 +68,10 @@ export default {
       this.loading = true // 请求数据之前把进度条打开
       // query 相当于get参数 路径参数 URL参数
       // body 路径 参数 data
-      let res = await this.$axios({
-        url: '/articles',
-        params: {
-          response_type: 'comment',
-          page: this.page.page,
-          per_page: this.page.pageSize
-        }
+      let res = await getComments({
+        response_type: 'comment',
+        page: this.page.page,
+        per_page: this.page.pageSize
       })
       this.loading = false // 响应回来后把进度条关了
       console.log(res)

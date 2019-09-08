@@ -16,12 +16,13 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="频道列表">
-        <el-select v-model="searchForm.channel_id"  @change="changeCondition">
+        <el-select v-model="searchForm.channel_id" @change="changeCondition">
           <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="时间选择">
-        <el-date-picker  @change="changeCondition"
+        <el-date-picker
+          @change="changeCondition"
           v-model="searchForm.dateRange"
           type="datetimerange"
           range-separator="至"
@@ -33,7 +34,10 @@
       </el-form-item>
     </el-form>
     <!-- 内容页面结构 -->
-    <div class="total-info">共找到<template style="color:#c00">{{page.total}}</template>条符合条件的内容</div>
+    <div class="total-info">
+      共找到
+      <template style="color:#c00">{{page.total}}</template>条符合条件的内容
+    </div>
     <div class="article-list">
       <!-- 循环项 -->
       <div class="article-item" v-for="item in list" :key="item.id.toString()">
@@ -53,23 +57,29 @@
           <span @click="modify(item)">
             <i class="el-icon-edit"></i>修改
           </span>
-          <span @click="delItem(item)">
+          <span @click="delItem(item)" v-if="item.status===2 ? !show : show">
             <i class="el-icon-delete"></i>删除
           </span>
         </div>
       </div>
     </div>
     <el-row type="flex" justify="center" style="margin:10px 0">
-        <el-pagination @current-change="changePage" :current-page="page.page" :page-size="page.pageSize" :total="page.total" background layout="prev, pager, next">
-    </el-pagination>
+      <el-pagination
+        @current-change="changePage"
+        :current-page="page.page"
+        :page-size="page.pageSize"
+        :total="page.total"
+        background
+        layout="prev, pager, next"
+      ></el-pagination>
     </el-row>
   </el-card>
 </template>
-
 <script>
 export default {
   data () {
     return {
+      show: true,
       searchForm: {
         // 定义一个表单数据对象
         status: 5, // 状态
@@ -79,7 +89,8 @@ export default {
       channels: [], // 频道列表数据
       list: [], // 请求内容列表数据
       defaultImg: require('../../assets/imgs/404.png'), // base64字符串,
-      page: { // 分页
+      page: {
+        // 分页
         page: 1,
         pageSize: 10,
         total: 0
@@ -93,17 +104,14 @@ export default {
       this.$router.push(`/home/publish/${item.id.toString()}`)
     },
     // 删除功能
-    delItem (item) {
+    async delItem (item) {
       console.log(item.id.toString())
-      this.$confirm('你确定要删除吗？').then(() => {
-        this.$axios({
-          url: `/articles/${item.id.toString()}`,
-          method: 'delete'
-        }).then(res => {
-          console.log(res)
-          this.getConditionArticle()
-        })
+      await this.$confirm('你确定要删除吗？')
+      await this.$axios({
+        url: `/articles/${item.id.toString()}`,
+        method: 'delete'
       })
+      this.getConditionArticle()
     },
     // 改变搜索条件时
     changeCondition () {
@@ -117,12 +125,11 @@ export default {
       this.getConditionArticle()
     },
     // 获取频道数据
-    getChannels () {
-      this.$axios({
+    async getChannels () {
+      let res = await this.$axios({
         url: '/channels'
-      }).then(res => {
-        this.channels = res.data.channels
       })
+      this.channels = res.data.channels
     },
     // 根据条件查询数据
     getConditionArticle () {
@@ -131,28 +138,27 @@ export default {
         status: this.searchForm.status === 5 ? null : this.searchForm.status,
         channel_id: this.searchForm.channel_id,
         begin_pubdate:
-            this.searchForm.dateRange.length > 0
-              ? this.searchForm.dateRange[0]
-              : null,
+          this.searchForm.dateRange.length > 0
+            ? this.searchForm.dateRange[0]
+            : null,
         end_pubdate:
-            this.searchForm.dateRange.length > 1
-              ? this.searchForm.dateRange[1]
-              : null,
+          this.searchForm.dateRange.length > 1
+            ? this.searchForm.dateRange[1]
+            : null,
         page: this.page.page,
         per_page: this.page.pageSize
       }
       this.getArticles(params)
     },
     // 调用接口请求文章列表数据
-    getArticles (params) {
-      this.$axios({
+    async getArticles (params) {
+      let res = await this.$axios({
         url: '/articles',
         params
-      }).then(res => {
-        console.log(res)
-        this.list = res.data.results
-        this.page.total = res.data.total_count
       })
+      console.log(res)
+      this.list = res.data.results
+      this.page.total = res.data.total_count
     }
   },
   created () {
@@ -185,11 +191,11 @@ export default {
           return 'success'
         case 3:
           return 'success'
-        default: break
+        default:
+          break
       }
     }
   }
-
 }
 </script>
 

@@ -4,11 +4,16 @@ import Home from './views/home'
 import Login from './views/login'
 import Main from './views/home/main'
 import Test from './views/test'
+import NotFount from './views/404'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '*', // 匹配所有找不到家的孩子
+      component: NotFount
+    },
     {
       path: '/home',
       component: Home,
@@ -41,6 +46,11 @@ export default new Router({
         // 账号信息
         path: 'account',
         component: () => import('./views/account')
+      },
+      {
+        // 粉丝管理-图文数据
+        path: 'fansdata',
+        component: () => import('././views/fans/fansData.vue')
       }]
     },
     {

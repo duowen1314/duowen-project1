@@ -1,13 +1,13 @@
 <template>
-<div class="layout-aside">
+<div class="layout-aside" :style="{width:collapse?'60px':'200px'}">
     <div class="title-logo">
         <a href="#">
-            <img src="../../assets/imgs/logo_admin.png" alt="">
+            <img :src="collapse ? defaultImg : img" alt="">
         </a>
     </div>
    <el-menu router class="menuLayout" background-color="#323745"
       text-color="#adafb5"
-      active-text-color="#ffd04b" style="width:201px">
+      active-text-color="#ffd04b" :style="{width:collapse?'61px':'201px'}" :collapse="collapse">
 
       <el-menu-item index="/">
         <i class="el-icon-s-home"></i>
@@ -44,15 +44,28 @@
 </template>
 
 <script>
+import eventBus from '../../utils/events'
 export default {
-
+  data () {
+    return {
+    //   isCollapse: true,
+      defaultImg: require('../../assets/imgs/toutiao.png'),
+      img: require('../../assets/imgs/logo_admin.png'),
+      collapse: false
+    }
+  },
+  created () {
+    eventBus.$on('openOrClose', (status) => {
+      this.collapse = status
+    })
+  }
 }
 </script>
 
 <style lang="less" scoped>
 
 .layout-aside{
-        width:200px;
+        height: 100%;
        .menuLayout{
            height: 100vh;
        }

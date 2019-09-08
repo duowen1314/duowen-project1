@@ -2,7 +2,7 @@
   <div class="layout-header">
     <el-row type="flex" class="row-bg" justify="space-between">
       <el-col :span="8" class="left">
-        <i class="el-icon-s-unfold"></i>
+        <i @click="openOrClose" class="icon" :class="{'el-icon-s-unfold':close,'el-icon-s-fold':!close}"></i>
         <span>江苏传智播客教育科技有限责任公司</span>
       </el-col>
       <el-col :span="4" class="right">
@@ -30,11 +30,17 @@ import eventBus from '../../utils/events'
 export default {
   data () {
     return {
+      close: false,
       userinfo: {},
       defaultImg: require('../../assets/imgs/avatar.jpg')
     }
   },
   methods: {
+    // 打开或者关闭
+    openOrClose () {
+      this.close = !this.close
+      eventBus.$emit('openOrClose', this.close) // 触发拨号
+    },
     // 获取用户个人信息
     getUserInfo () {
     //   let token = localStorage.getItem('username')// 获取token
@@ -62,6 +68,7 @@ export default {
     eventBus.$on('updateUserInfo', () => {
       this.getUserInfo()
     })
+
     this.getUserInfo()
   }
 }
@@ -69,6 +76,9 @@ export default {
 
 <style lang="less" scoped>
 .layout-header {
+  .icon{
+    cursor: pointer;
+  }
     .row-bg{
         align-items: center;
     }
